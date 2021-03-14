@@ -1,13 +1,13 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Redirect, Route, RouteProps } from "react-router-dom";
-import { RootState } from "../redux/store";
+import { RootState } from "../../redux/store";
 
 interface Props extends RouteProps {
   component: any;
 }
 
-export const PublicRoute: React.FC<Props> = ({
+export const PrivateRoute: React.FC<Props> = ({
   component: RouteComponent,
   ...rest
 }) => {
@@ -17,10 +17,10 @@ export const PublicRoute: React.FC<Props> = ({
     <Route
       {...rest}
       render={(props) =>
-        !authenticated ? (
+        authenticated ? (
           <RouteComponent {...props} />
         ) : (
-          <Redirect to="/space" />
+          <Redirect to="/sign-in" />
         )
       }
     />

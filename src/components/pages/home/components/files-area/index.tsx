@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../../redux/store";
+import { RootState } from "../../../../../redux/store";
 import { FileItem } from "../file-item";
 import "./files-area.css";
 
@@ -10,7 +10,7 @@ export const FilesArea: React.FC = () => {
   return (
     <div className="files-area-container">
       {currentFiles.map((file) => {
-        return <FileItem fileType={file.type} filename={file.name} />;
+        return <FileItem file={file} />;
       })}
     </div>
   );

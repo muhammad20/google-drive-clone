@@ -1,5 +1,5 @@
 import { AuthAction, SET_ERROR, SET_LOADING, SET_SUCCESS, SET_USER, SIGN_OUT } from "../actions/auth/auth.interface";
-import { IUserAuthState } from "../states/auth.interface";
+import { IUserAuthState } from "../states/auth.state";
 
 const intitialState: IUserAuthState = {
     user: null,

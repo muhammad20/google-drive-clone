@@ -1,5 +1,5 @@
 .file-item-container {
-  border-radius: 50px;
+  border-radius: 20px;
   width: 200px;
   height: 50px;
   display: grid;
@@ -9,7 +9,7 @@
   border: 1px solid #AAAAAA;
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.19);
   cursor: pointer;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 50% 50%;
 }
 
 .file-item-container:hover {
@@ -17,18 +17,18 @@
 }
 
 .file-item-text-container {
-  float: left;
   grid-area: 1 / 2 / 2 / 2;
   display: grid;
-  text-align: end;
+  text-align: right;
 }
 
 .file-item-text {
-  margin-top: 20px;
+  margin-top: 12px;
 }
 
 .file-item-icon {
-  margin-left: 10px;
+  justify-content: left;
+  position: relative;
   height: 28px;
   width: 28px;
   border: none;

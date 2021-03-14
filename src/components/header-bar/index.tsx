@@ -2,36 +2,54 @@ import React, { useState } from "react";
 import { Button, Form, FormControl, Navbar } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../redux/actions/auth/auth.actions";
-import { createFolder } from "../../redux/actions/files/files.actions";
+import { createFolder, uploadFile } from "../../redux/actions/files/files.actions";
 import { RootState } from "../../redux/store";
-import { FileModel } from "../../services/viewmodels/file.model";
+import { FileModel } from "../../viewmodels/file.model";
 import firebase from "../../firebase/app-config";
 import "./header.css";
 
 export const Header: React.FC = () => {
   const dispatch = useDispatch();
-  const { currentFiles, currentFolderPath, currentFolderName } = useSelector(
+  const { currentFiles, currentParentFolderPath, currentParentFolderName } = useSelector(
     (state: RootState) => state.files
-  );
-
-  const [newFolder, setNewFolder] = useState<FileModel>(
-    new FileModel("", -1, "", "", "")
   );
 
   const signOut = () => {
     dispatch(logOut());
   };
 
-  const uploadNewFile = () => {};
+  const fileToUpload = new FileModel("", -1, "", "", "");
 
-  const createNewFolder = () => {
-    dispatch(createFolder(newFolder, currentFiles, currentFolderName));
+  const uploadNewFile = () => {
+    if(fileToUpload.name == null) return;
+    dispatch(uploadFile(fileToUpload, currentParentFolderPath));
   };
 
   const uid = firebase.auth().currentUser?.uid;
 
   const [createFolderValidated, setCreateFolderValidated] = useState(false);
-  // const [uploadFileValidate, setUploadFileValidate] = useState(false);
+
+  const onFileChange = async (e: any) => {
+    const file = e.target.files[0];
+    console.log(file);
+    const filePath = `${currentParentFolderPath}${file.name}`;
+    const certainUID = uid == null ? "" : uid;
+    fileToUpload.name = file.name;
+    fileToUpload.parentDirName = currentParentFolderName;
+    fileToUpload.type = 0;
+    fileToUpload.uid = certainUID;
+    fileToUpload.path = filePath;
+  };
+
+  const handleFileUploadSubmit = (event: any) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+    if (form.checkValidity() === false) {
+      return;
+    } else {
+      console.log(form[0].file);
+    }
+  };
 
   const handleFolderCreationSubmit = (event: any) => {
     const form = event.currentTarget;
@@ -42,18 +60,16 @@ export const Header: React.FC = () => {
       return;
     } else {
       const folderName = `${form[0].value}/`;
-      const folderPath = `${currentFolderPath}${folderName}`;
+      const folderPath = `${currentParentFolderPath}${folderName}`;
       const certainUID = uid == null ? "" : uid;
       const folder = new FileModel(
         certainUID,
         1,
         folderName,
-        currentFolderName,
+        currentParentFolderPath,
         folderPath
       );
-      setNewFolder(folder);
-
-      createNewFolder();
+      dispatch(createFolder(folder, currentFiles, currentParentFolderPath));
       setCreateFolderValidated(true);
     }
   };
@@ -88,20 +104,16 @@ export const Header: React.FC = () => {
           />
         </Form>
         <Form
-          noValidate
-          validated={createFolderValidated}
-          onSubmit={handleFolderCreationSubmit}
+          onSubmit={handleFileUploadSubmit}
         >
           <FormControl
             required
             type="file"
             name="File"
-            placeholder="File to upload"
+            onChange={onFileChange}
             className="mr-sm-2"
           />
-          <Button onClick={uploadNewFile} variant="outline-success">
-            Upload File
-          </Button>
+          <Button onClick={uploadNewFile}>Upload</Button>
         </Form>
         <Button onClick={signOut}>Sign Out</Button>
       </Navbar.Collapse>
