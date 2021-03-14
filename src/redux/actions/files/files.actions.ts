@@ -1,7 +1,7 @@
 import { ThunkAction } from "redux-thunk";
 import { FileModel } from "../../../viewmodels/file.model";
 import { RootState } from "../../store";
-import { CREATE_FILE, FileAction, GET_USER_FILES } from "./files.interface";
+import { CREATE_FILE, FileAction, GET_USER_FILES, UPLOAD_FILE } from "./files.interface";
 import firebase from '../../../firebase/app-config';
 
 export const getFiles = (uid: string, currentParentFolderPath: string): ThunkAction<void, RootState, null, FileAction> => {
@@ -20,6 +20,7 @@ export const getFiles = (uid: string, currentParentFolderPath: string): ThunkAct
                         file.data().name,
                         file.data().parentFolder,
                         file.data().path,
+                        file.data().downloadURL
                     )
                 )
             });
@@ -85,24 +86,35 @@ export const createFolder = (file: FileModel, currentFiles: FileModel[], current
 export const uploadFile = (file: any, currentFolderPath: string): ThunkAction<void, RootState, null, FileAction> => {
     let user = firebase.auth().currentUser;
     return async dispatch => {
-        if (user == null) return;
+        if (user == null || file.name == null) return;
         try {
-            console.log(file.name);
             const initialPath = `/users/${user?.uid}/`;
             const totalPath = `${initialPath}${currentFolderPath}${file.name}`;
             const storageRef = firebase.storage().ref();
             const fileRef = storageRef.child(totalPath);
-            await fileRef.put(file);
+            console.log(file);
+            const uploadTask = await fileRef.put(file);
+            console.log(uploadTask.bytesTransferred);
             const downloadURL = await fileRef.getDownloadURL();
-            console.log(fileRef);
-            await saveFileInfoToDb(file, downloadURL, currentFolderPath);
+            console.log(downloadURL);
+            const fileToBeSavedInDb = new FileModel(user.uid, 0, file.name, currentFolderPath, totalPath, downloadURL);
+            await saveFileInfoToDb(fileToBeSavedInDb, currentFolderPath);
+            dispatch({
+                downloadURL: downloadURL,
+                type: UPLOAD_FILE,
+                filename: file.name,
+                success: true,
+                uid: user.uid,
+                path: totalPath,
+                parentFolderPath: currentFolderPath
+            })
         } catch (e) {
             console.log(e);
         }
     }
 }
 
-const saveFileInfoToDb = async (file: FileModel, downloadURL: string, currentParentFolderPath: string) => {
+const saveFileInfoToDb = async (file: FileModel, currentParentFolderPath: string) => {
     const uid = firebase.auth().currentUser?.uid;
     if (uid == null) {
         return;
@@ -110,7 +122,7 @@ const saveFileInfoToDb = async (file: FileModel, downloadURL: string, currentPar
     try {
         await firebase.firestore().collection('/file').add(
             {
-                downloadURL: downloadURL,
+                downloadURL: file.downloadURL,
                 name: file.name,
                 path: file.path,
                 parentFolder: currentParentFolderPath,

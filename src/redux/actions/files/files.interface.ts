@@ -32,10 +32,11 @@ interface IChangeCurrentFolder {
 interface IUploadFile {
     type: typeof UPLOAD_FILE,
     filename: string,
-    parentFolder: string,
+    parentFolderPath: string,
     success: boolean,
     uid: string,
-    path: string
+    path: string,
+    downloadURL: string
 }
 
 interface IGetUserFiles {

@@ -34,7 +34,7 @@ export const fileReducer = (prevState = initialState, action: FileAction): IFile
         }
         case UPLOAD_FILE: {
             let files = prevState.currentFiles;
-            let file = new FileModel(action.uid, 0, action.filename, action.parentFolder, action.path);
+            let file = new FileModel(action.uid, 0, action.filename, action.parentFolderPath, action.path, action.downloadURL);
             files.push(file);
             return {
                 ...prevState,

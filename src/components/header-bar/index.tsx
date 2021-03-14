@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Form, FormControl, Navbar } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../redux/actions/auth/auth.actions";
-import { createFolder, uploadFile } from "../../redux/actions/files/files.actions";
+import { createFolder } from "../../redux/actions/files/files.actions";
 import { RootState } from "../../redux/store";
 import { FileModel } from "../../viewmodels/file.model";
 import firebase from "../../firebase/app-config";
@@ -10,7 +10,7 @@ import "./header.css";
 
 export const Header: React.FC = () => {
   const dispatch = useDispatch();
-  const { currentFiles, currentParentFolderPath, currentParentFolderName } = useSelector(
+  const { currentFiles, currentParentFolderPath } = useSelector(
     (state: RootState) => state.files
   );
 
@@ -18,38 +18,10 @@ export const Header: React.FC = () => {
     dispatch(logOut());
   };
 
-  const fileToUpload = new FileModel("", -1, "", "", "");
-
-  const uploadNewFile = () => {
-    if(fileToUpload.name == null) return;
-    dispatch(uploadFile(fileToUpload, currentParentFolderPath));
-  };
-
   const uid = firebase.auth().currentUser?.uid;
 
   const [createFolderValidated, setCreateFolderValidated] = useState(false);
 
-  const onFileChange = async (e: any) => {
-    const file = e.target.files[0];
-    console.log(file);
-    const filePath = `${currentParentFolderPath}${file.name}`;
-    const certainUID = uid == null ? "" : uid;
-    fileToUpload.name = file.name;
-    fileToUpload.parentDirName = currentParentFolderName;
-    fileToUpload.type = 0;
-    fileToUpload.uid = certainUID;
-    fileToUpload.path = filePath;
-  };
-
-  const handleFileUploadSubmit = (event: any) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    if (form.checkValidity() === false) {
-      return;
-    } else {
-      console.log(form[0].file);
-    }
-  };
 
   const handleFolderCreationSubmit = (event: any) => {
     const form = event.currentTarget;
@@ -80,8 +52,9 @@ export const Header: React.FC = () => {
         <p className="logo-style">Drive</p>
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nac" />
-      <Navbar.Collapse id="basic-navbar-nav">
+      <Navbar.Collapse id="responsive-navbar-nav">
         <Form
+        className="mr-auto"
           inline
           noValidate
           validated={createFolderValidated}
@@ -103,19 +76,7 @@ export const Header: React.FC = () => {
             className="mr-sm-2"
           />
         </Form>
-        <Form
-          onSubmit={handleFileUploadSubmit}
-        >
-          <FormControl
-            required
-            type="file"
-            name="File"
-            onChange={onFileChange}
-            className="mr-sm-2"
-          />
-          <Button onClick={uploadNewFile}>Upload</Button>
-        </Form>
-        <Button onClick={signOut}>Sign Out</Button>
+        <Button className="mr-auto" style={{float: 'left', background: 'red'}} onClick={signOut}>Sign Out</Button>
       </Navbar.Collapse>
     </Navbar>
   );

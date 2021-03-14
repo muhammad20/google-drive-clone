@@ -5,42 +5,40 @@ import { FileModel } from "../../../../../viewmodels/file.model";
 import "./file-item.css";
 
 interface IFileItemProps {
-  file: FileModel
+  file: FileModel;
 }
 
 export const FileItem: React.FC<IFileItemProps> = (props: IFileItemProps) => {
-
   const dispatch = useDispatch();
 
-  const onFolderClick = (e: any) => {
+  const onFolderClick = () => {
     dispatch({
       type: CHANGE_CURRENT_FOLDER,
       folderName: props.file.name,
-      folderPath: props.file.path
-    })
+      folderPath: props.file.path,
+    });
   };
 
-  const onFileClick = (e: any) => {
-
-  }
-
   return (
-    <div className="file-item-container prevent-select" onClick={
-      props.file.type === 0 ? onFileClick : onFolderClick
-    }>
+    <div
+      className="file-item-container prevent-select"
+      onClick={props.file.type === 0 ? () => {} : onFolderClick}
+    >
       {
         <img
           className="file-item-icon"
           src={
-            props.file.type === 0
-              ? "file_icon32px.svg"
-              : "folder_icon32px.svg"
+            props.file.type === 0 ? "file_icon32px.svg" : "folder_icon32px.svg"
           }
           alt="nothing"
         ></img>
       }
       <div className="file-item-text-container">
-        <p className="file-item-text">{props.file.name}</p>
+        {props.file.downloadURL && (
+          <a href={props.file.downloadURL} target="_blank" rel="noreferrer">
+            <p className="file-item-text">{props.file.name}</p>
+          </a>
+        )}
       </div>
     </div>
   );
