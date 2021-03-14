@@ -1,0 +1,8 @@
+.files-area-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    overflow: scroll;
+    grid-area: 1 / 2 / 2 / 2;
+    background-color: #F8F8F8;
+}

@@ -1,0 +1,36 @@
+.file-item-container {
+  border-radius: 50px;
+  width: 200px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  margin: 1%;
+  border: 1px solid #AAAAAA;
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.19);
+  cursor: pointer;
+  grid-template-columns: auto 1fr;
+}
+
+.file-item-container:hover {
+  background-color: rgb(199, 197, 197);
+}
+
+.file-item-text-container {
+  float: left;
+  grid-area: 1 / 2 / 2 / 2;
+  display: grid;
+  text-align: end;
+}
+
+.file-item-text {
+  margin-top: 20px;
+}
+
+.file-item-icon {
+  margin-left: 10px;
+  height: 28px;
+  width: 28px;
+  border: none;
+  grid-area: 1 / 1 / 2 / 2;
+}

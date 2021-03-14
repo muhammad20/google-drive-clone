@@ -1,0 +1,36 @@
+.left-panel-container {
+    min-width: 220px;
+    border-right: 1px solid white;
+    text-align: center;
+    grid-area: 1 / 1 / 2 / 2;
+    height: 100%;
+}
+
+.left-panel-buttons-container {
+    margin-top: 60px;
+    display: grid;
+    justify-content: center;
+}
+
+.left-panel-button {
+    border-radius: 5px;
+    margin-top: 7%;
+    margin-bottom: 7%;
+    width: 180px;
+    height: 40px;
+    text-align: center;
+    background-color: white;
+    display: block;
+    border: none;
+    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+.left-panel-button:hover {
+    background-color: #909090;
+    color: white;
+    cursor: pointer;
+}
+
+.left-panel-button:focus {
+    outline: 0;
+}
