@@ -50,7 +50,7 @@ export const CreateFolder: React.FC = () => {
       </button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Upload File</Modal.Title>
+          <Modal.Title>Create Folder</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form

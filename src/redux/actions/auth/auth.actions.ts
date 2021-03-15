@@ -7,6 +7,16 @@ import { IUser } from '../../states/user.interface';
 export const setUser = (user: firebase.User): ThunkAction<void, RootState, null, AuthAction> => {
     return async dispatch => {
         try {
+            let registered = false;
+            await (await firebase.firestore().collection('/users').get()).forEach((userRef) => {
+                if (userRef.id === user.uid) registered = true;
+            });
+            if(!registered) {
+                await firebase.firestore().collection('/users').doc(user.uid).set({
+                    email: user.email,
+                    name: user.displayName
+                });
+            }
             const userData: IUser = {
                 email: user.email,
                 firstName: user.displayName,
@@ -19,6 +29,12 @@ export const setUser = (user: firebase.User): ThunkAction<void, RootState, null,
         } catch (e) {
             console.log(e);
         }
+    }
+}
+
+export const getUsers = (): ThunkAction<void, RootState, null, AuthAction> => {
+    return async dispatch => {
+        
     }
 }
 

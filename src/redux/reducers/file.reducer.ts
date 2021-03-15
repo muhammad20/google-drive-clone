@@ -1,11 +1,13 @@
 import { FileModel } from "../../viewmodels/file.model";
-import { CHANGE_CURRENT_FOLDER, CREATE_FILE, FileAction, GET_USER_FILES, UPLOAD_FILE } from "../actions/files/files.interface";
-import { IFileState } from "../states/file.state";
+import { CHANGE_CURRENT_FOLDER, CHANGE_SCOPE, CREATE_FILE, FileAction, GET_SHARERS, GET_USER_FILES, UPLOAD_FILE } from "../actions/files/files.interface";
+import { CurrentScope, IFileState } from "../states/file.state";
 
 const initialState: IFileState = {
     currentFiles: [],
     currentParentFolderName: '',
-    currentParentFolderPath: '/'
+    currentParentFolderPath: '/',
+    currentScope: CurrentScope.MY_FILES,
+    currentSharers: []
 }
 
 export const fileReducer = (prevState = initialState, action: FileAction): IFileState => {
@@ -14,6 +16,7 @@ export const fileReducer = (prevState = initialState, action: FileAction): IFile
             return {
                 ...prevState,
                 currentFiles: action.files,
+                currentScope: CurrentScope.MY_FILES
             }
         }
         case CREATE_FILE: {
@@ -39,6 +42,13 @@ export const fileReducer = (prevState = initialState, action: FileAction): IFile
             return {
                 ...prevState,
                 currentFiles: files
+            }
+        }
+        case GET_SHARERS: {
+            return {
+                ...prevState,
+                currentSharers: action.sharers,
+                currentScope: CurrentScope.SHARERS
             }
         }
         default: return prevState;

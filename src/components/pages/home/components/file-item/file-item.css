@@ -40,3 +40,25 @@
   margin-top: 10px;
   grid-area: 1 / 1 / 2 / 2;
 }
+
+.share-icon {
+  margin-top: 5px;
+  border-radius: 32px;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+}
+
+.share-icon:hover {
+  background-color: gray;
+}
+
+.user-item-container {
+  border: 1px solid gray;
+  border-radius: 10px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}

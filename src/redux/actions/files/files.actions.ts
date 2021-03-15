@@ -1,18 +1,19 @@
 import { ThunkAction } from "redux-thunk";
 import { FileModel } from "../../../viewmodels/file.model";
 import { RootState } from "../../store";
-import { CREATE_FILE, FileAction, GET_USER_FILES, UPLOAD_FILE } from "./files.interface";
+import { CREATE_FILE, FileAction, GET_SHARERS, GET_USER_FILES, UPLOAD_FILE } from "./files.interface";
 import firebase from '../../../firebase/app-config';
+import { CurrentScope } from "../../states/file.state";
 
 export const getFiles = (uid: string, currentParentFolderPath: string): ThunkAction<void, RootState, null, FileAction> => {
     return async dispatch => {
         try {
             if (uid == null) return;
+            console.log(uid);
             const userFiles = await firebase.firestore().collection('/file').where("ownerId", "==", uid)
                 .where("parentFolder", "==", currentParentFolderPath).get();
             let files: FileModel[] = [];
             userFiles.forEach(file => {
-                console.log(file.data())
                 files.push(
                     new FileModel(
                         uid,
@@ -40,6 +41,61 @@ export const getFiles = (uid: string, currentParentFolderPath: string): ThunkAct
     }
 }
 
+export const shareFile = (uid: string, file: FileModel, sharedWithUID: string): ThunkAction<void, RootState, null, FileAction> => {
+    return async dispatch => {
+        const fileRef = await firebase.firestore().collection('/file').where("ownerId", "==", uid)
+        .where("parentFolder", "==", file.parentDirName).where("name", "==", file.name).get();
+        try {
+            console.log(firebase.auth().currentUser?.displayName);
+            fileRef.forEach(async ref => {
+                await firebase.firestore().collection('/sharers').doc(uid).set({
+                    sharedWith: sharedWithUID,
+                    ownerName: firebase.auth().currentUser?.displayName
+                });
+                await firebase.firestore().collection('/sharedFiles').add({
+                    ownerId: uid,
+                    sharedWithUID: sharedWithUID,
+                    name: ref.data().name,
+                    downloadURL: file.downloadURL == null ? "" : file.downloadURL,
+                    path: `${firebase.auth().currentUser?.displayName}/${file.name}`,
+                    parentFolder: `${firebase.auth().currentUser?.displayName}/`
+                });
+            });       
+        } catch(e) {
+            console.log(e);
+        }
+    }
+}
+
+export const getSharers = (uid: string):  ThunkAction<void, RootState, null, FileAction> => {
+    return async dispatch => {
+        let refs = await firebase.firestore().collection('/sharers').where("sharedWith", "==", uid).get();
+        let sharersFolders: {ownerName: string, ownerId: string}[] = [];
+        refs.forEach(ref => {
+            console.log(ref.data());
+            sharersFolders.push({
+                ownerName: ref.data().ownerName,
+                ownerId: ref.id
+            });
+        });
+        dispatch({
+            type: GET_SHARERS,
+            sharers: sharersFolders
+        });
+    }
+}
+
+export const getSharedFiles = (uid: string, ownerId: string): ThunkAction<void, RootState, null, FileAction> => {
+    return async dispatch => {
+        let refs = await firebase.firestore().collection('/sharers').where("sharedWith", "==", uid).where("ownerId", "==", ownerId).get();
+        let files: FileModel[] = [];
+        refs.forEach(ref => {
+            console.log(ref.data());
+        });
+    }
+}
+
+
 export const createFolder = (file: FileModel, currentFiles: FileModel[], currentFolder: string): ThunkAction<void, RootState, null, FileAction> => {
     let filenameIsAvailable = true;
     currentFiles.forEach(currentFile => {
@@ -57,15 +113,13 @@ export const createFolder = (file: FileModel, currentFiles: FileModel[], current
         }
         try {
             let folderPath = `${currentFolder}${file.name}`;
-            console.log(file.name);
             await firebase.firestore().collection('/file').add(
                 {
                     ownerId: uid,
                     parentFolder: currentFolder,
                     name: file.name,
                     path: folderPath,
-                    type: 1,
-                    shaerdWith: []
+                    type: 1
                 }
             );
             dispatch({
@@ -92,11 +146,8 @@ export const uploadFile = (file: any, currentFolderPath: string): ThunkAction<vo
             const totalPath = `${initialPath}${currentFolderPath}${file.name}`;
             const storageRef = firebase.storage().ref();
             const fileRef = storageRef.child(totalPath);
-            console.log(file);
-            const uploadTask = await fileRef.put(file);
-            console.log(uploadTask.bytesTransferred);
+            await fileRef.put(file);
             const downloadURL = await fileRef.getDownloadURL();
-            console.log(downloadURL);
             const fileToBeSavedInDb = new FileModel(user.uid, 0, file.name, currentFolderPath, totalPath, downloadURL);
             await saveFileInfoToDb(fileToBeSavedInDb, currentFolderPath);
             dispatch({
@@ -127,11 +178,10 @@ const saveFileInfoToDb = async (file: FileModel, currentParentFolderPath: string
                 path: file.path,
                 parentFolder: currentParentFolderPath,
                 ownerId: uid,
-                type: 0,
-                sharedWith: []
+                type: 0
             }
         );
-    } catch(e) {
+    } catch (e) {
         console.log(e);
     }
 }
