@@ -1,15 +1,15 @@
 .file-item-container {
-  border-radius: 20px;
+  border-radius: 10px;
   width: 200px;
   height: 50px;
   display: grid;
   place-items: center;
-  overflow: hidden;
   margin: 1%;
   border: 1px solid #AAAAAA;
-  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.19);
   cursor: pointer;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: auto 1fr;
+  min-width: 100px;
 }
 
 .file-item-container:hover {
@@ -17,18 +17,22 @@
 }
 
 .file-item-text-container {
-  grid-area: 1 / 2 / 2 / 2;
-  display: grid;
-  text-align: right;
+  text-align: center;
+  width: 80%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .file-item-text {
-  margin-top: 12px;
+  margin-top: 14px;
+  text-overflow: ellipsis;
 }
 
 .file-item-icon {
   justify-content: left;
   position: relative;
+  margin-left: 10px;
   height: 28px;
   width: 28px;
   border: none;
