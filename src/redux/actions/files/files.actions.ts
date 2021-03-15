@@ -88,7 +88,7 @@ export const uploadFile = (file: any, currentFolderPath: string): ThunkAction<vo
     return async dispatch => {
         if (user == null || file.name == null) return;
         try {
-            const initialPath = `/users/${user?.uid}/`;
+            const initialPath = `/users/${user?.uid}/myFiles`;
             const totalPath = `${initialPath}${currentFolderPath}${file.name}`;
             const storageRef = firebase.storage().ref();
             const fileRef = storageRef.child(totalPath);
