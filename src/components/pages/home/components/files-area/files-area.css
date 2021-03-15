@@ -5,4 +5,5 @@
     overflow: scroll;
     grid-area: 1 / 2 / 2 / 2;
     background-color: white;
+    height: auto;
 }

@@ -1,5 +1,6 @@
 .login-page-container {
     display: grid;
     place-items: center;
+    text-align: center;
     margin-top: 10%;
 }

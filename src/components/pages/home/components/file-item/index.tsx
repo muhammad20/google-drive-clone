@@ -19,6 +19,10 @@ export const FileItem: React.FC<IFileItemProps> = (props: IFileItemProps) => {
     });
   };
 
+  const onShareFolderClick = () => {
+
+  }
+
   if (props.file.type === 0) {
     return (
       <div className="file-item-container prevent-select">
@@ -34,6 +38,11 @@ export const FileItem: React.FC<IFileItemProps> = (props: IFileItemProps) => {
             </a>
           )}
         </div>
+        <img
+          style={{ gridArea: "1 / 3 / 3 / 3", marginRight: "10px" }}
+          src="share_icon.svg"
+          alt="share_icon"
+        ></img>
       </div>
     );
   }
@@ -47,10 +56,14 @@ export const FileItem: React.FC<IFileItemProps> = (props: IFileItemProps) => {
         src="folder_icon32px.svg"
         alt="nothing"
       ></img>
-
       <div className="file-item-text-container">
         <p className="file-item-text">{folderName}</p>
       </div>
+      <img onClick={onShareFolderClick}
+        style={{ gridArea: "1 / 3 / 3 / 3", marginRight: "10px" }}
+        src="share_icon.svg"
+        alt="share_icon"
+      ></img>
     </div>
   );
 };
