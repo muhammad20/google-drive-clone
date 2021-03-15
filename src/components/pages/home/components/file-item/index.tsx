@@ -19,26 +19,37 @@ export const FileItem: React.FC<IFileItemProps> = (props: IFileItemProps) => {
     });
   };
 
-  return (
-    <div
-      className="file-item-container prevent-select"
-      onClick={props.file.type === 0 ? () => {} : onFolderClick}
-    >
-      {
+  if (props.file.type === 0) {
+    return (
+      <div className="file-item-container prevent-select">
         <img
           className="file-item-icon"
-          src={
-            props.file.type === 0 ? "file_icon32px.svg" : "folder_icon32px.svg"
-          }
-          alt="nothing"
+          src="file_icon32px.svg"
+          alt="file_icon"
         ></img>
-      }
+        <div className="file-item-text-container">
+          {props.file.downloadURL && (
+            <a href={props.file.downloadURL} target="_blank" rel="noreferrer">
+              <p className="file-item-text">{props.file.name}</p>
+            </a>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  const folderName = props.file.name.slice(0, props.file.name.length - 1);
+
+  return (
+    <div className="file-item-container prevent-select" onClick={onFolderClick}>
+      <img
+        className="file-item-icon"
+        src="folder_icon32px.svg"
+        alt="nothing"
+      ></img>
+
       <div className="file-item-text-container">
-        {props.file.downloadURL && (
-          <a href={props.file.downloadURL} target="_blank" rel="noreferrer">
-            <p className="file-item-text">{props.file.name}</p>
-          </a>
-        )}
+        <p className="file-item-text">{folderName}</p>
       </div>
     </div>
   );
