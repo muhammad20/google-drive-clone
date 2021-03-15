@@ -3,12 +3,13 @@ import React, { useState } from "react";
 import { Button, Form, FormControl, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { createFolder } from "../../../../../redux/actions/files/files.actions";
+import { CurrentScope } from "../../../../../redux/states/file.state";
 import { RootState } from "../../../../../redux/store";
 import { FileModel } from "../../../../../viewmodels/file.model";
 
 export const CreateFolder: React.FC = () => {
   const dispatch = useDispatch();
-  const { currentFiles, currentParentFolderPath } = useSelector(
+  const { currentFiles, currentParentFolderPath, currentScope } = useSelector(
     (state: RootState) => state.files
   );
 
@@ -45,7 +46,7 @@ export const CreateFolder: React.FC = () => {
 
   return (
     <div>
-      <button onClick={handleShow} className="left-panel-button prevent-select">
+      <button onClick={handleShow} disabled={currentScope !== CurrentScope.MY_FILES ? true : false} className="left-panel-button prevent-select">
         Create Folder
       </button>
       <Modal show={show} onHide={handleClose}>

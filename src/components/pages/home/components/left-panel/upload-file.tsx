@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Button, Form, FormControl, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadFile } from "../../../../../redux/actions/files/files.actions";
+import { CurrentScope } from "../../../../../redux/states/file.state";
 import { RootState } from "../../../../../redux/store";
 
 export const UploadFile: React.FC = () => {
   const dispatch = useDispatch();
-  const { currentParentFolderPath } = useSelector(
+  const { currentParentFolderPath, currentScope } = useSelector(
     (state: RootState) => state.files
   );
 
@@ -32,7 +33,7 @@ export const UploadFile: React.FC = () => {
 
   return (
     <div>
-      <button onClick={handleShow} className="left-panel-button prevent-select">
+      <button onClick={handleShow} disabled={currentScope !== CurrentScope.MY_FILES ? true : false} className="left-panel-button prevent-select">
         Upload File
       </button>
       <Modal show={show} onHide={handleClose}>

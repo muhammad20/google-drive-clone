@@ -1,5 +1,5 @@
 import { FileModel } from "../../viewmodels/file.model";
-import { CHANGE_CURRENT_FOLDER, CHANGE_SCOPE, CREATE_FILE, FileAction, GET_SHARERS, GET_USER_FILES, UPLOAD_FILE } from "../actions/files/files.interface";
+import { CHANGE_CURRENT_FOLDER, CHANGE_SCOPE, CREATE_FILE, FileAction, GET_SHARED_FILES, GET_SHARERS, GET_USER_FILES, UPLOAD_FILE } from "../actions/files/files.interface";
 import { CurrentScope, IFileState } from "../states/file.state";
 
 const initialState: IFileState = {
@@ -49,6 +49,13 @@ export const fileReducer = (prevState = initialState, action: FileAction): IFile
                 ...prevState,
                 currentSharers: action.sharers,
                 currentScope: CurrentScope.SHARERS
+            }
+        }
+        case GET_SHARED_FILES: {
+            return {
+                ...prevState,
+                currentScope: CurrentScope.SHARED_WITH_ME,
+                currentFiles: action.sharedFiles
             }
         }
         default: return prevState;

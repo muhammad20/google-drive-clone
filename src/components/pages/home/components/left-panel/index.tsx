@@ -67,6 +67,7 @@ export const LeftPanel: React.FC = () => {
         <button
           onClick={handleOnClickBack}
           className="left-panel-button prevent-select"
+          disabled={currentScope === CurrentScope.MY_FILES ? false : true}
         >
           Back
         </button>

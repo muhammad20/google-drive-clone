@@ -1,7 +1,7 @@
 import { ThunkAction } from "redux-thunk";
 import { FileModel } from "../../../viewmodels/file.model";
 import { RootState } from "../../store";
-import { CREATE_FILE, FileAction, GET_SHARERS, GET_USER_FILES, UPLOAD_FILE } from "./files.interface";
+import { CREATE_FILE, FileAction, GET_SHARED_FILES, GET_SHARERS, GET_USER_FILES, UPLOAD_FILE } from "./files.interface";
 import firebase from '../../../firebase/app-config';
 import { CurrentScope } from "../../states/file.state";
 
@@ -44,7 +44,7 @@ export const getFiles = (uid: string, currentParentFolderPath: string): ThunkAct
 export const shareFile = (uid: string, file: FileModel, sharedWithUID: string): ThunkAction<void, RootState, null, FileAction> => {
     return async dispatch => {
         const fileRef = await firebase.firestore().collection('/file').where("ownerId", "==", uid)
-        .where("parentFolder", "==", file.parentDirName).where("name", "==", file.name).get();
+            .where("parentFolder", "==", file.parentDirName).where("name", "==", file.name).get();
         try {
             console.log(firebase.auth().currentUser?.displayName);
             fileRef.forEach(async ref => {
@@ -60,17 +60,17 @@ export const shareFile = (uid: string, file: FileModel, sharedWithUID: string): 
                     path: `${firebase.auth().currentUser?.displayName}/${file.name}`,
                     parentFolder: `${firebase.auth().currentUser?.displayName}/`
                 });
-            });       
-        } catch(e) {
+            });
+        } catch (e) {
             console.log(e);
         }
     }
 }
 
-export const getSharers = (uid: string):  ThunkAction<void, RootState, null, FileAction> => {
+export const getSharers = (uid: string): ThunkAction<void, RootState, null, FileAction> => {
     return async dispatch => {
         let refs = await firebase.firestore().collection('/sharers').where("sharedWith", "==", uid).get();
-        let sharersFolders: {ownerName: string, ownerId: string}[] = [];
+        let sharersFolders: { ownerName: string, ownerId: string }[] = [];
         refs.forEach(ref => {
             console.log(ref.data());
             sharersFolders.push({
@@ -87,11 +87,17 @@ export const getSharers = (uid: string):  ThunkAction<void, RootState, null, Fil
 
 export const getSharedFiles = (uid: string, ownerId: string): ThunkAction<void, RootState, null, FileAction> => {
     return async dispatch => {
-        let refs = await firebase.firestore().collection('/sharers').where("sharedWith", "==", uid).where("ownerId", "==", ownerId).get();
+        let refs = await firebase.firestore().collection('/sharedFiles').where("sharedWithUID", "==", uid).where("ownerId", "==", ownerId).get();
         let files: FileModel[] = [];
         refs.forEach(ref => {
-            console.log(ref.data());
+            files.push(new FileModel(
+                ownerId, ref.data().type, ref.data().name, ref.data().parentFolder, ref.data().path, ref.data().dowloadURL
+            ));
         });
+        dispatch({
+            type: GET_SHARED_FILES,
+            sharedFiles: files
+        })
     }
 }
 
