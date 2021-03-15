@@ -47,11 +47,14 @@ export const shareFile = (uid: string, file: FileModel, sharedWithUID: string): 
             .where("parentFolder", "==", file.parentDirName).where("name", "==", file.name).get();
         try {
             console.log(firebase.auth().currentUser?.displayName);
-            fileRef.forEach(async ref => {
+            let sharerRef = await firebase.firestore().collection('/sharers').doc(uid).get();
+            if(!sharerRef.exists) {
                 await firebase.firestore().collection('/sharers').doc(uid).set({
                     sharedWith: sharedWithUID,
                     ownerName: firebase.auth().currentUser?.displayName
                 });
+            }
+            fileRef.forEach(async ref => {
                 await firebase.firestore().collection('/sharedFiles').add({
                     ownerId: uid,
                     sharedWithUID: sharedWithUID,

@@ -35,13 +35,7 @@ export const FileItem: React.FC<IFileItemProps> = (props: IFileItemProps) => {
             </a>
           )}
         </div>
-        <div className="share-icon">
-        <img
-          style={{ gridArea: "1 / 3 / 3 / 3", marginRight: "10px" }}
-          src="share_icon.svg"
-          alt="share_icon"
-        ></img>
-        </div>
+        <ShareFile file={props.file}/>
       </div>
     );
   }
