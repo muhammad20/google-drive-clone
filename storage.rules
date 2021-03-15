@@ -1,8 +1,17 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    match /{allPaths=**} {
-      allow read, write: if request.auth!=null;
+    match /users/{ownerId}/myFiles/{anyPath=**} {
+      allow read, create, delete: if request.auth != null && request.auth.uid == ownerId;
+      allow read: if request.auth != null;
     }
+    
+    match /users/{ownerId}/sharedWithOthers/{anyPath=**} {
+    	allow create, read, delete: if request.auth != null && request.auth.uid == ownerId;
+    }
+    
+    match /users/{ownerId}/sharedWithOthers/{sharedWithId}/{anyPath=**} {
+			allow read: if request.auth != null && request.auth.uid == sharedWithId;
+		}
   }
 }
