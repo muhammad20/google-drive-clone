@@ -68,7 +68,7 @@ export const ShareFile: React.FC<IShareFileProps> = (props: IShareFileProps) => 
     if (form.checkValidity() === false) {
       return;
     } else {
-      await dispatch(shareFile(uid == null ? "" : uid, props.file, users[0].id));
+      await dispatch(shareFile(uid == null ? "" : uid, props.file, selectedUser.userId));
       setShow(false);
     }
   };
