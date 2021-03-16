@@ -9,7 +9,6 @@ export const getFiles = (uid: string, currentParentFolderPath: string): ThunkAct
     return async dispatch => {
         try {
             if (uid == null) return;
-            console.log(uid);
             const userFiles = await firebase.firestore().collection('/file').where("ownerId", "==", uid)
                 .where("parentFolder", "==", currentParentFolderPath).get();
             let files: FileModel[] = [];
@@ -31,7 +30,6 @@ export const getFiles = (uid: string, currentParentFolderPath: string): ThunkAct
                 success: true
             });
         } catch (e) {
-            console.log(e);
             dispatch({
                 type: GET_USER_FILES,
                 files: [],
@@ -46,7 +44,6 @@ export const shareFile = (uid: string, file: FileModel, sharedWithUID: string): 
         const fileRef = await firebase.firestore().collection('/file').where("ownerId", "==", uid)
             .where("parentFolder", "==", file.parentDirName).where("name", "==", file.name).get();
         try {
-            console.log(firebase.auth().currentUser?.displayName);
             let sharerRef = await firebase.firestore().collection('/sharers').doc(uid).get();
             if(!sharerRef.exists) {
                 await firebase.firestore().collection('/sharers').doc(uid).set({
@@ -75,7 +72,6 @@ export const getSharers = (uid: string): ThunkAction<void, RootState, null, File
         let refs = await firebase.firestore().collection('/sharers').where("sharedWith", "==", uid).get();
         let sharersFolders: { ownerName: string, ownerId: string }[] = [];
         refs.forEach(ref => {
-            console.log(ref.data());
             sharersFolders.push({
                 ownerName: ref.data().ownerName,
                 ownerId: ref.id
