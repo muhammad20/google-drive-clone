@@ -90,7 +90,7 @@ export const getSharedFiles = (uid: string, ownerId: string): ThunkAction<void, 
         let files: FileModel[] = [];
         refs.forEach(ref => {
             files.push(new FileModel(
-                ownerId, ref.data().type, ref.data().name, ref.data().parentFolder, ref.data().path, ref.data().dowloadURL
+                ownerId, ref.data().type, ref.data().name, ref.data().parentFolder, ref.data().path, ref.data().downloadURL
             ));
         });
         dispatch({
