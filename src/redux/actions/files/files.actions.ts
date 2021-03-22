@@ -58,7 +58,8 @@ export const shareFile = (uid: string, file: FileModel, sharedWithUID: string): 
                     name: ref.data().name,
                     downloadURL: file.downloadURL == null ? "" : file.downloadURL,
                     path: `${firebase.auth().currentUser?.displayName}/${file.name}`,
-                    parentFolder: `${firebase.auth().currentUser?.displayName}/`
+                    parentFolder: `${firebase.auth().currentUser?.displayName}/`,
+                    type: ref.data().type
                 });
             });
         } catch (e) {
