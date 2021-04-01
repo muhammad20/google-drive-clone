@@ -1,15 +1,15 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./left-panel.css";
-import {
-  CHANGE_CURRENT_FOLDER,
-  GET_USER_FILES,
-} from "../../../../../redux/actions/files/files.interface";
+import { CHANGE_CURRENT_FOLDER } from "../../../../../redux/actions/files/files.interface";
 import { UploadFile } from "./upload-file";
 import { RootState } from "../../../../../redux/store";
 import { CreateFolder } from "./create-folder";
 import { CurrentScope } from "../../../../../redux/states/file.state";
-import { getFiles, getSharers } from "../../../../../redux/actions/files/files.actions";
+import {
+  getFiles,
+  getSharers,
+} from "../../../../../redux/actions/files/files.actions";
 
 export const LeftPanel: React.FC = () => {
   const dispatch = useDispatch();

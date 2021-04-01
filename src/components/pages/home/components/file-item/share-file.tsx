@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Form, FormControl, Modal } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { shareFile } from "../../../../../redux/actions/files/files.actions";
-import { RootState } from "../../../../../redux/store";
 import { FileModel } from "../../../../../viewmodels/file.model";
 import firebase from "../../../../../firebase/app-config";
 import { IUser } from "../../../../../redux/states/user.interface";
 
 interface IShareFileProps {
-  file: FileModel
+  file: FileModel;
 }
 
-export const ShareFile: React.FC<IShareFileProps> = (props: IShareFileProps) => {
+export const ShareFile: React.FC<IShareFileProps> = (
+  props: IShareFileProps
+) => {
   const dispatch = useDispatch();
-  const { currentParentFolderPath } = useSelector(
-    (state: RootState) => state.files
-  );
 
   const [show, setShow] = useState(false);
 
@@ -29,12 +27,15 @@ export const ShareFile: React.FC<IShareFileProps> = (props: IShareFileProps) => 
   const uid = firebase.auth().currentUser?.uid;
 
   // select user with Id
-  const [selectedUser, setSelectedUser] = useState<{userId: string, email: string}>({userId: "", email: ""});
+  const [selectedUser, setSelectedUser] = useState<{
+    userId: string;
+    email: string;
+  }>({ userId: "", email: "" });
 
   const handleOnSelectUserClick = (e: any) => {
     setSelectedUser({
       userId: e.currentTarget.id,
-      email: e.currentTarget.children[0].id
+      email: e.currentTarget.children[0].id,
     });
   };
 
@@ -68,7 +69,9 @@ export const ShareFile: React.FC<IShareFileProps> = (props: IShareFileProps) => 
     if (form.checkValidity() === false) {
       return;
     } else {
-      await dispatch(shareFile(uid == null ? "" : uid, props.file, selectedUser.userId));
+      await dispatch(
+        shareFile(uid == null ? "" : uid, props.file, selectedUser.userId)
+      );
       setShow(false);
     }
   };
@@ -77,7 +80,7 @@ export const ShareFile: React.FC<IShareFileProps> = (props: IShareFileProps) => 
     <div>
       <img
         onClick={handleShow}
-        style={{ gridArea: "1 / 3 / 3 / 3", marginRight: "10px" }}
+        style={{ gridArea: "2 / 3 / 1 / 3", marginRight: "10px" }}
         src="share_icon.svg"
         alt="share_icon"
       ></img>
@@ -109,7 +112,7 @@ export const ShareFile: React.FC<IShareFileProps> = (props: IShareFileProps) => 
               })}
             <FormControl
               required
-              style={{ marginTop: "10px"}}
+              style={{ marginTop: "10px" }}
               type="submit"
               value="Share"
               className="mr-sm-2"

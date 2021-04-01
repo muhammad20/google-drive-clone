@@ -1,6 +1,8 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CHANGE_CURRENT_FOLDER } from "../../../../../redux/actions/files/files.interface";
+import { CurrentScope } from "../../../../../redux/states/file.state";
+import { RootState } from "../../../../../redux/store";
 import { FileModel } from "../../../../../viewmodels/file.model";
 import "./file-item.css";
 import { ShareFile } from "./share-file";
@@ -11,6 +13,8 @@ interface IFileItemProps {
 
 export const FileItem: React.FC<IFileItemProps> = (props: IFileItemProps) => {
   const dispatch = useDispatch();
+
+  const { currentScope } = useSelector((state: RootState) => state.files);
 
   const onFolderClick = () => {
     dispatch({
@@ -35,7 +39,9 @@ export const FileItem: React.FC<IFileItemProps> = (props: IFileItemProps) => {
             </a>
           )}
         </div>
-        <ShareFile file={props.file}/>
+        { currentScope === CurrentScope.MY_FILES &&
+          <ShareFile file={props.file}/> 
+        }
       </div>
     );
   }

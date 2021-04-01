@@ -1,5 +1,5 @@
 import { FileModel } from "../../viewmodels/file.model";
-import { CHANGE_CURRENT_FOLDER, CHANGE_SCOPE, CREATE_FILE, FileAction, GET_SHARED_FILES, GET_SHARERS, GET_USER_FILES, UPLOAD_FILE } from "../actions/files/files.interface";
+import { CHANGE_CURRENT_FOLDER, CREATE_FILE, FileAction, GET_SHARED_FILES, GET_SHARERS, GET_USER_FILES, UPLOAD_FILE } from "../actions/files/files.interface";
 import { CurrentScope, IFileState } from "../states/file.state";
 
 const initialState: IFileState = {

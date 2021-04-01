@@ -3,7 +3,6 @@ import { FileModel } from "../../../viewmodels/file.model";
 import { RootState } from "../../store";
 import { CREATE_FILE, FileAction, GET_SHARED_FILES, GET_SHARERS, GET_USER_FILES, UPLOAD_FILE } from "./files.interface";
 import firebase from '../../../firebase/app-config';
-import { CurrentScope } from "../../states/file.state";
 
 export const getFiles = (uid: string, currentParentFolderPath: string): ThunkAction<void, RootState, null, FileAction> => {
     return async dispatch => {

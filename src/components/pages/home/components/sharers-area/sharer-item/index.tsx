@@ -1,7 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSharedFiles } from "../../../../../../redux/actions/files/files.actions";
-import { GET_SHARED_FILES } from "../../../../../../redux/actions/files/files.interface";
 import { RootState } from "../../../../../../redux/store";
 import "./sharer-item.css";
 

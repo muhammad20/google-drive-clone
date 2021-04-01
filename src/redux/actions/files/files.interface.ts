@@ -1,5 +1,5 @@
 import { FileModel } from "../../../viewmodels/file.model";
-import { CurrentScope, ISharer } from "../../states/file.state";
+import { ISharer } from "../../states/file.state";
 
 export const CREATE_FILE = 'CREATE_FILE';
 export const SHARE_FILE = 'SHARE_FILE';
