@@ -9,8 +9,8 @@ export const FilesArea: React.FC = () => {
 
   return (
     <div className="files-area-container">
-      {currentFiles.map((file) => {
-        return <FileItem file={file} />;
+      {currentFiles.map((file, index) => {
+        return <FileItem file={file} key={index}/>;
       })}
     </div>
   );

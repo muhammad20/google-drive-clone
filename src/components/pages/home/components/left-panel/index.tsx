@@ -45,8 +45,6 @@ export const LeftPanel: React.FC = () => {
     dispatch(getSharers(uid == null ? "" : uid));
   };
 
-  console.log(currentScope);
-
   return (
     <div className="left-panel-container">
       <p

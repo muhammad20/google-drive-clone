@@ -27,7 +27,7 @@ export const App: React.FC = () => {
     const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         dispatch(setLoading(true));
-        await dispatch(setUser(user));
+        dispatch(setUser(user));
       }
       dispatch(setLoading(false));
     });

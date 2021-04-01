@@ -20,12 +20,10 @@ export const UploadFile: React.FC = () => {
 
   const onFileChange = async (e: any) => {
     const file = e.target.files[0];
-    console.log(file);
     fileToUpload = file;
   };
 
   const uploadNewFile = async () => {
-    console.log(fileToUpload);
     if (fileToUpload.name == null) return;
     await dispatch(uploadFile(fileToUpload, currentParentFolderPath));
     handleClose();

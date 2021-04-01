@@ -15,7 +15,6 @@ export const SharerItem: React.FC<ISharerItemProps> = (props: ISharerItemProps) 
   const id = useSelector((state: RootState) => state.auth.user?.id);
 
   const onFolderClick = () => {
-    console.log(props.ownerId)
     dispatch(getSharedFiles(id == null ? "" : id, props.ownerId));
   };
 

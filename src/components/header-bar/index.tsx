@@ -10,7 +10,6 @@ export const Header: React.FC = () => {
 
   const { user } = useSelector((state: RootState) => state.auth);
   const { currentParentFolderPath } = useSelector((state: RootState) => state.files);
-  console.log(currentParentFolderPath);
   const signOut = async () => {
     await dispatch(logOut());
   };

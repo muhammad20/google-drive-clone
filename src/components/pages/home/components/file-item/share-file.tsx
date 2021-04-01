@@ -57,7 +57,6 @@ export const ShareFile: React.FC<IShareFileProps> = (
             });
           }
         });
-        console.log(appUsers);
         setUsers(appUsers);
       });
   }, [uid]);
@@ -91,12 +90,13 @@ export const ShareFile: React.FC<IShareFileProps> = (
         <Modal.Body>
           <Form className="mr-auto" onSubmit={handleFileShareSubmit}>
             {users &&
-              users.map((user) => {
+              users.map((user, index) => {
                 return (
                   <div
                     className="user-item-container"
                     id={user.id}
                     onClick={handleOnSelectUserClick}
+                    key={index}
                   >
                     <p
                       id={user.email === null ? "" : user.email}
