@@ -41,25 +41,25 @@ export const ShareFile: React.FC<IShareFileProps> = (
 
   const [users, setUsers] = useState<IUser[]>([]);
 
-  useEffect(() => {
-    firebase
-      .firestore()
-      .collection("/users")
-      .get()
-      .then((usersRef) => {
-        let appUsers: IUser[] = [];
-        usersRef.forEach((user) => {
-          if (user.id !== uid) {
-            appUsers.push({
-              id: user.id,
-              firstName: user.data().name,
-              email: user.data().email,
-            });
-          }
-        });
-        setUsers(appUsers);
-      });
-  }, [uid]);
+  // useEffect(() => {
+  //   firebase
+  //     .firestore()
+  //     .collection("/users")
+  //     .get()
+  //     .then((usersRef) => {
+  //       let appUsers: IUser[] = [];
+  //       usersRef.forEach((user) => {
+  //         if (user.id !== uid) {
+  //           appUsers.push({
+  //             id: user.id,
+  //             firstName: user.data().name,
+  //             email: user.data().email,
+  //           });
+  //         }
+  //       });
+  //       setUsers(appUsers);
+  //     });
+  // }, [uid]);
 
   const handleFileShareSubmit = async (event: any) => {
     const form = event.currentTarget;
