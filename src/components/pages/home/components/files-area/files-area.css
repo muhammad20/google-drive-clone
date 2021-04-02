@@ -1,9 +1,10 @@
 .files-area-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: left;
-    overflow: scroll;
-    grid-area: 1 / 2 / 2 / 2;
-    background-color: white;
-    height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:baseline;
+  align-content: flex-start;
+  overflow: scroll;
+  grid-area: 0 / 1 / 2 / 2;
+  background-color: white;
+  height: 100%;
 }

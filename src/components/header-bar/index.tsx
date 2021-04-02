@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Navbar } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { logOut } from "../../redux/actions/auth/auth.actions";
+import { logOut, setLoading } from "../../redux/actions/auth/auth.actions";
 import { RootState } from "../../redux/store";
 import "./header.css";
 
@@ -11,7 +11,9 @@ export const Header: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { currentParentFolderPath } = useSelector((state: RootState) => state.files);
   const signOut = async () => {
+    dispatch(setLoading(true));
     await dispatch(logOut());
+    dispatch(setLoading(false));
   };
 
   return (

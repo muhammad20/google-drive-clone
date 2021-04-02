@@ -22,6 +22,10 @@ h2 {
   font-weight: 100;
 }
 
+#root {
+  height: 100%;
+}
+
 .prevent-select {
   -moz-user-select: none;
   -webkit-user-select: none;

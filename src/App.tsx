@@ -17,7 +17,7 @@ import { PrivateRoute } from "./components/routing/private-route";
 import { PublicRoute } from "./components/routing/public-route";
 import { RootState } from "./redux/store";
 import { Loader } from "./components/loader";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -27,7 +27,7 @@ export const App: React.FC = () => {
     const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         dispatch(setLoading(true));
-        dispatch(setUser(user));
+        await dispatch(setUser(user));
       }
       dispatch(setLoading(false));
     });
@@ -38,9 +38,12 @@ export const App: React.FC = () => {
   }, [dispatch]);
 
   const { loading } = useSelector((state: RootState) => state.auth);
-
-  if(loading) {
-    return <Loader />
+  if (loading) {
+    return (
+      <div style={{ height: "100%", width: "100%" }}>
+        <Loader width={60} height={60} borderWidth={6} />
+      </div>
+    );
   }
 
   return (
