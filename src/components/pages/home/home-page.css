@@ -2,5 +2,5 @@
     display: grid;
     grid-template-columns: auto 1fr;
     grid-template-rows: 1fr;
-    height: 100%;
+    height: calc(100vh - 56px);
 }
