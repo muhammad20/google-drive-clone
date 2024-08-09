@@ -1,6 +1,7 @@
 {
   "hosting": {
     "public": "build",
+    "site": "google-drive-clone",
     "ignore": [
       "firebase.json",
       "**/.*",

@@ -1,0 +1,30 @@
+name: Deploy To Firebase Hosting
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build_and_preview:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Authenticate to Google Cloud"
+        id: auth
+        uses: "google-github-actions/auth@v1"
+        with:
+          token_format: "access_token"
+          workload_identity_provider: "projects/296065267017/locations/global/workloadIdentityPools/drive-clone-github/providers/github"
+          service_account: "github-cd@drive-clone-9ecda.iam.gserviceaccount.com"
+          create_credentials_file: true
+      - run: |
+          echo "SERVICE_ACCOUNT_KEY=$(cat "${{ steps.auth.outputs.credentials_file_path }}" | tr -d '\n')" >> $GITHUB_ENV
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.ACCESS_TOKEN }}"
+          firebaseServiceAccount: "${{ env.SERVICE_ACCOUNT_KEY }}"
+          projectId: drive-clone-9ecda
+          target: drive-clone-9ecda
+          channelId: live
